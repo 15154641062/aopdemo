@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/context
+  http://www.springframework.org/schema/context/spring-context.xsd
+  http://www.springframework.org/schema/aop
+  http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!-- 指定需要扫描的包，使注解生效 -->
+    <!--    <context:annotation-config/>-->
+    <context:component-scan base-package="com.bh.aopdemo"/>
+    <!-- 基于注解的aop配置-->
+    <aop:aspectj-autoproxy/>
+    <!--    <bean id="MyAspect" class="com.bh.aopdemo.aop.MyAspect"></bean>-->
+
+    <!-- 基于xml的aop配置-->
+    <!--
+        <aop:config>
+            <aop:aspect id="aopLog" ref="logging">
+                <aop:pointcut id="myPointCut"
+                              expression="execution(* com.bh.aopdemo..*.*(..))"/>
+                <aop:before pointcut-ref="myPointCut" method="myBefore"/>
+                <aop:after pointcut-ref="myPointCut" method="myAfter"/>
+                <aop:after-returning pointcut-ref="myPointCut"
+                                     returning="returnVal"
+                                     method="myAfterReturning"/>
+                <aop:after-throwing pointcut-ref="myPointCut"
+                                    throwing="ex"
+                                    method="myAfterThrowing"/>
+            </aop:aspect>
+        </aop:config>
+    -->
+
+    <bean id="logging" class="com.bh.aopdemo.aop.Logging"/>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <!--数据库驱动 -->
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <!--连接数据库的url -->
+        <property name="url" value="jdbc:mysql://localhost:3306/authority?serverTimezone=UTC"/>
+        <!--连接数据库的用户名 -->
+        <property name="username" value="root"/>
+        <!--连接数据库的密码 -->
+        <property name="password" value="151476"/>
+    </bean>
+    <!-- 2配置JDBC模板 -->
+    <bean id="jdbcTemplate"
+          class="org.springframework.jdbc.core.JdbcTemplate">
+        <!-- 默认必须使用数据源 -->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+</beans>
